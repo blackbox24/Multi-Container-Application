@@ -1,5 +1,6 @@
 import { getTodosCollection, todosCollection } from "../config/db.js";
 import { ObjectId, BSON } from "mongodb";
+import { todoInput, handleControllerError } from "../middleware/validate.js";
 
 export const getAllTasks = async (req, resp) => {
   try {
@@ -23,19 +24,26 @@ export const getAllTasks = async (req, resp) => {
 
 export const addTodo = async (req, resp) => {
     try {
-        const {title,} = req.body;
+        const {body} = await todoInput.parseAsync(req);
+        
+        if(!body){
+            return resp.status(400).json({"message":""})
+        }
+
         const cursor = await todosCollection;
 
         await cursor.insertOne({
-            title: title,
-            is_complete: req.body.is_complete || false,
+            title: body.title,
+            is_complete: body.is_complete || false,
             created_At: Date()
         })
         console.log("Successfully insert data")
         return resp.status(201).json({message:"Successfully added todo"})
     } catch (error) {
-        console.error("Error occurred: ", error)
-        return resp.status(400).json({error:error})
+        if (error instanceof Error) {
+            return handleControllerError(error, resp, "Add Todo");
+        }
+        return resp.status(500).json({error:error})
     }
 } 
 
