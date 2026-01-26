@@ -12,12 +12,12 @@ app.use(express.json());
 
 app.use(cors());
 
-app.get("/", async (req, resp) => {
+app.get("/api/", async (req, resp) => {
   console.log("Healthy");
   resp.status(200).json({ message: "Server is healthy" });
 });
 
-app.use("/todos/",todo_router);
+app.use("/api/todos/",todo_router);
 
 app.get("/test-db", async (req, resp) => {
   try {
