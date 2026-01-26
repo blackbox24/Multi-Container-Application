@@ -19,11 +19,14 @@ jobs:
           - name: Checkout repository
             uses: actions/checkout@v4
 
-          - name: Install Packages
+          - name: Setting Up nodejs
             uses: actions/setup-node@v3
             with:
               node-version: "${{env.NODE_VERSION}}"
-          
+
+          - name: Installing packages 
+            run: npm ci
+
           - name: Run test 
             run: |
                 npm run test
