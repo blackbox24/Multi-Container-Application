@@ -85,3 +85,26 @@ export const updateTodo = async(req, resp) => {
         return resp.status(500).json({"message":"Error occurred",error})
     }
 }
+
+export const deleteTodo = async(req, resp) => {
+    try{
+        const {id} = req.params;
+        const query = {
+            _id: new ObjectId(id),
+        }
+        const cursor = await todosCollection;
+        const todo = await cursor.deleteOne(query);
+        console.log(todo)
+        if(!todo.deletedCount){
+            return resp.status(400).json({"message":"Failed to update data",reason: "No match found"})
+        }
+
+        return resp.status(200).json({"message":"delete successful",});
+    }catch(error){
+        if ( error instanceof BSON.BSONError){
+            console.error(error)
+            return resp.status(404).json({"message":"Not found",data:[]});
+        }
+        return resp.status(500).json({"message":"Error occurred",error})
+    }
+}
