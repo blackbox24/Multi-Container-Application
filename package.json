@@ -1,0 +1,29 @@
+{
+  "name": "multi-container-project",
+  "version": "1.0.0",
+  "description": "A minimal, unauthenticated REST API for managing a todo list, built with Node.js, Express, Mongoose and MongoDB.",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blackbox24/Multi-Container-Application.git"
+  },
+  "author": "Hope Decardi-Nelson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/blackbox24/Multi-Container-Application/issues"
+  },
+  "homepage": "https://github.com/blackbox24/Multi-Container-Application#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "mongodb": "^7.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
