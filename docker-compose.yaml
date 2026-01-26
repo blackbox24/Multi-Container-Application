@@ -11,13 +11,8 @@ services:
       MONGO_DB_URL: mongodb://root:example@mongo:27017/
       MONGO_DB_NAME: todo_db
       PORT: 3000
-    volumes:
-      - .:/app
-    develop:
-      watch:
-        - path: ./
-          action: sync+restart
-          target: /app
+    networks:
+      - db_network
 
   mongo:
     image: mongo
@@ -27,6 +22,8 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
       - mongo_data:/data/db
+    networks:
+      - db_network
 
   mongo-express:
     image: mongo-express
@@ -38,7 +35,12 @@ services:
       ME_CONFIG_BASICAUTH_ENABLED: true
       ME_CONFIG_BASICAUTH_USERNAME: mongoexpressuser
       ME_CONFIG_BASICAUTH_PASSWORD: mongoexpresspass
+    networks:
+      - db_network
 
 
+networks:
+  db_network:
+  
 volumes:
   mongo_data:

@@ -40,13 +40,14 @@ This project demonstrates:
 ```
 todo-api/
 ├── src/
-│   ├── models/
-│   │   └── Todo.js
+│   ├── controllers/
+│   │   └── todo.controller.js
+│   ├── config/
+│   │   └── db.js
 │   ├── routes/
-│   │   └── todos.js
+│   │   └── todos.routes.js
 │   ├── app.js              # or index.js
-│   └── server.js
-├── tests/                  (optional)
+│   └── index.js
 ├── .dockerignore
 ├── .gitignore
 ├── Dockerfile
