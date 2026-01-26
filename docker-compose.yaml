@@ -10,6 +10,14 @@ services:
     environment:
       MONGO_DB_URL: mongodb://root:example@mongo:27017/
       MONGO_DB_NAME: todo_db
+      PORT: 3000
+    volumes:
+      - .:/app
+    develop:
+      watch:
+        - path: ./
+          action: sync+restart
+          target: /app
 
   mongo:
     image: mongo

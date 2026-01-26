@@ -1,16 +1,91 @@
-import { MongoClient } from "mongodb";
-import * as dotenv from "dotenv";
+// src/db/index.js
+import { MongoClient } from 'mongodb';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
-const MONGO_DB_URL =
-  process.env.MONGO_DB_URL || "mongodb://root:example@mongo:27017/";
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://root:example@mongo:27017';
+const MONGODB_DB_NAME = process.env.MONGO_DB_NAME || 'todos-app';
 
-const MONGO_DB_NAME = process.env.MONGO_DB_NAME || "test"
+let client;
+let db;
 
-const client = new MongoClient(MONGO_DB_URL)
+/**
+ * Connect to MongoDB (idempotent – safe to call multiple times)
+ * @returns {Promise<import('mongodb').Db>}
+ */
+export async function connectToDatabase() {
+  if (db) {
+    return db; // already connected
+  }
 
-await client.connect();
+  try {
+    client = new MongoClient(MONGODB_URI, {
+      // Recommended options in 2024+
+      connectTimeoutMS: 10000,
+      serverSelectionTimeoutMS: 10000,
+      // heartbeatFrequencyMS: 10000,    // optional
+      // retryWrites: true,              // usually enabled by default
+    });
 
-export const db = client.db(MONGO_DB_NAME)
+    await client.connect();
+    console.log('→ MongoDB connected successfully');
 
+    db = client.db(MONGODB_DB_NAME);
+    
+    // Optional: you can verify connection by pinging
+    await db.command({ ping: 1 });
+    console.log(`→ Using database: ${MONGODB_DB_NAME}`);
+
+    return db;
+  } catch (error) {
+    console.error('MongoDB connection failed:', error.message);
+    throw error; // let the caller handle it
+  }
+}
+
+/**
+ * Get the "todos" collection
+ * Creates it implicitly on first use if it doesn't exist
+ */
+export async function getTodosCollection() {
+  const db = await connectToDatabase();
+  const collect = db.collection('todo')
+  return collect;
+}
+
+
+// Graceful shutdown (important in containers)
+export async function closeDatabase() {
+  if (client?.isConnected?.()) {
+    await client.close();
+    console.log('→ MongoDB connection closed');
+    client = null;
+    db = null;
+  }
+}
+
+// Optional: export a ready-to-use collection promise (most common pattern)
+export const todosCollection = (async () => {
+  try {
+    const db = await connectToDatabase();
+    const collect = db.collection('todo')
+    return collect;
+  } catch (err) {
+    console.error('Failed to initialize todos collection:', err);
+    process.exit(1); // or throw – depending on your preference
+  }
+})();
+
+export const getAllCollections = async()=>{
+  try{
+    const db = await connectToDatabase();
+    const db_collections = db.listCollections().toArray();
+    const collectNames = (await db_collections).map( c => c.name)
+    console.log('Collection Names',collectNames)
+    return collectNames;
+  }catch(err){
+    console.error('Failed to initialize todos collection:', err);
+    process.exit(1);
+  }
+};
