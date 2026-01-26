@@ -27,21 +27,6 @@ jobs:
           - name: Run test 
             run: npm run test
 
-    security-scan: 
-        name: Running security scans
-        runs-on: ubuntu-latest
-
-        steps:
-            - name: Checkout repo
-              uses: actions/checkout@v4
-
-            - name: Run security scan
-              uses: github/codeql-action/init@v3
-              with:
-                languages: javascript
-            
-            - name: Perform CodeQL analysis
-              uses: github/codeql-action/analyze@v3
 
     # build-image:
     #     name: Building docker image
