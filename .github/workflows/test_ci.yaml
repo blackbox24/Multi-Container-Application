@@ -12,7 +12,7 @@ jobs:
           - run: echo "The name of the branch is  ${{github.ref}} and the name of repo is ${{github.repository}}"
 
           - name: Checkout repository code
-            uses: actions/checkout@5
+            uses: actions/checkout@v5
           
           - run: echo "${{github.repository}} has been cloned to runner"
 
