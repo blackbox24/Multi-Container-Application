@@ -1,4 +1,5 @@
 import { getTodosCollection, todosCollection } from "../config/db.js";
+import { ObjectId, BSON } from "mongodb";
 
 export const getAllTasks = async (req, resp) => {
   try {
@@ -37,3 +38,24 @@ export const addTodo = async (req, resp) => {
         return resp.status(400).json({error:error})
     }
 } 
+
+
+export const getSingleTodo =  async(req, resp) => {
+    try{
+        const {id} = req.params;
+        const query = {
+            _id: new ObjectId(id),
+        }
+        const cursor = await todosCollection;
+        const todo = await cursor.findOne(query);
+        console.log(todo)
+
+        return resp.status(200).json({"message":"Fetch successful",data:todo});
+    }catch(error){
+        if ( error instanceof BSON.BSONError){
+            console.error(error)
+            return resp.status(404).json({"message":"Not found",data:[]});
+        }
+        return resp.status(400).json({"message":"Error occurred"})
+    }
+}
