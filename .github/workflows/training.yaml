@@ -24,3 +24,24 @@ jobs:
                 echo "Build Date: $BUILD_DATE"
                 echo "Build Date: $BUILD_NUMBER"
                 echo "Build Date: $VERSION_TAG" 
+    multi-platform:
+        strategy:
+          matrix:
+            os: [ubuntu-latest, windows-latest, macos-latest ]
+            include:
+                - os: ubuntu-latest
+                  BUILD_COMMAND: "echo 'ub'"
+                - os: windows-latest
+                  BUILD_COMMAND: "echo 'win'"
+                
+                - os: macos-latest
+                  BUILD_COMMAND: "echo 'mac'"
+
+        runs-on: ${{matrix.os}}
+        env: 
+            BUILD_COMMAND: ${{matrix.BUILD_COMMAND}}
+        
+        steps:
+            - name: Build applicaiton
+              run: ${{env.BUILD_COMMAND}}
+
