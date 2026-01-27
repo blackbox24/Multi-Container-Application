@@ -1,9 +1,11 @@
-import { expect, test } from "vitest";
+import { describe, expect, it } from "vitest";
+import supertest from "supertest";
+import app from "../index"
 
-function sampletest(){
-    return "Hello world"
-}
-
-test("display hello world", ()=>{
-    expect(sampletest()).toBe("Hello world")
+describe("Health Checks", ()=>{
+    it("GET / should return status 200 and a message", async()=>{
+        const response = await supertest(app).get("/");
+        expect(response.status).toBe(200);
+        expect(response.body.message).toBe("Server is healthy")
+    })
 })

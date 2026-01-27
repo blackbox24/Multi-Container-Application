@@ -12,12 +12,12 @@ app.use(express.json());
 
 app.use(cors());
 
-app.get("/api/", async (req, resp) => {
+app.get("/", async (req, resp) => {
   console.log("Healthy");
   resp.status(200).json({ message: "Server is healthy" });
 });
 
-app.use("/api/todos/",todo_router);
+app.use("/todos/",todo_router);
 
 app.get("/test-db", async (req, resp) => {
   try {
@@ -32,3 +32,5 @@ app.get("/test-db", async (req, resp) => {
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);
 });
+
+export default app;
