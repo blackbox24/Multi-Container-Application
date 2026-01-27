@@ -30,12 +30,12 @@ jobs:
             os: [ubuntu-latest, windows-latest, macos-latest ]
             include:
                 - os: ubuntu-latest
-                  BUILD_COMMAND: "echo 'ub'"
+                  BUILD_COMMAND: "ls -l"
                 - os: windows-latest
-                  BUILD_COMMAND: "echo 'win'"
+                  BUILD_COMMAND: "dir"
                 
                 - os: macos-latest
-                  BUILD_COMMAND: "echo 'mac'"
+                  BUILD_COMMAND: "ls"
 
         runs-on: ${{matrix.os}}
         env: 
