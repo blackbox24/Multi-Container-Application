@@ -42,6 +42,7 @@ jobs:
             BUILD_COMMAND: ${{matrix.BUILD_COMMAND}}
         
         steps:
+            - name: Checkout
+              uses: actions/checkout@v5
             - name: Build applicaiton
               run: ${{env.BUILD_COMMAND}}
-
