@@ -1,5 +1,5 @@
 name: GitHub Actons Tutorial
-
+run-name: Github Actions Tutorial
 on:
     push:
         branches: [main]
@@ -11,7 +11,7 @@ jobs:
             - name: Generate build metadata
               id: metadata
               run: |
-                BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ)
+                BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 
                 echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
                 
