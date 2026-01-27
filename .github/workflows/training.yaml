@@ -12,9 +12,15 @@ jobs:
               id: metadata
               run: |
                 BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+                BUILD_NUMBER=$GITHUB_RUN_NUMBER
+                VERSION_TAG=${GITHUB_REF#refs/tags/}
 
                 echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
+                echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+                echo "VERSION_TAG=$VERSION_TAG" >> $GITHUB_ENV
                 
             - name: Use generate variables
               run: |
-                echo "Build Date: $BUILD_DATE" 
+                echo "Build Date: $BUILD_DATE"
+                echo "Build Date: $BUILD_NUMBER"
+                echo "Build Date: $VERSION_TAG" 
