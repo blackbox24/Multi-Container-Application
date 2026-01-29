@@ -80,5 +80,5 @@ jobs:
 
         - name: List directory
           run: |
-            tar -xvzf .deployment/app_build.tar.gz .
+            tar -xvzf ./deployment/app_build.tar.gz .
             ls -l ./deployment
