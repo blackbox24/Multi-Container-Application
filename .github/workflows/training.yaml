@@ -58,7 +58,7 @@ jobs:
         - name: Install packages
           run: npm ci
         - name: Build application
-          run: tar -czf app_build.tar.gz .
+          run: tar -cvzf app_build.tar.gz . --warning=no-file-changed
 
         - name: upload build artifacts
           uses: actions/upload-artifact@v4
