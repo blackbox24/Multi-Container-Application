@@ -59,7 +59,7 @@ jobs:
           run: npm ci
         - name: Build application
           run: |
-            tar -cvzf app_build.tar.gz . --exclude=app_build.tar.gz --ignore-failed-read
+            tar -cvzf app_build.tar.gz . --exclude 'app_build.tar.gz' --ignore-failed-read
 
         - name: upload build artifacts
           uses: actions/upload-artifact@v4
