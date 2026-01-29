@@ -60,7 +60,7 @@ jobs:
         - name: Build application
           run: |
             sudo mkdir -p build_output 
-            tar -cvzf build_output/app_build.tar.gz  --exclude 'build_output' --ignore-failed-read ./
+            sudo tar -cvzf build_output/app_build.tar.gz  --exclude 'build_output' --ignore-failed-read ./
 
         - name: upload build artifacts
           uses: actions/upload-artifact@v4
