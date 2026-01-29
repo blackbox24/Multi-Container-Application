@@ -82,3 +82,8 @@ jobs:
           run: |
             tar -xvzf ./deployment/app_build.tar.gz .
             ls -l ./deployment
+
+        - name: Monitor Artifact
+          run: |
+            echo "Checking artifact usage"
+            gh api repos/${{github.repository}} --jq '.size'
