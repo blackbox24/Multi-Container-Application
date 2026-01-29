@@ -49,14 +49,22 @@ jobs:
     build-artifact:
       runs-on: ubuntu-latest
       steps:
+        - name: Checkout
+          uses: actions/checkout@v5
+
+        - name: setup nodejs env
+          uses: actions/setup-node@v3
+        
+        - name: Install packages
+          run: npm ci
         - name: Build application
-          run: npm run build
+          run: tar czf app_build.tar.gz .
 
         - name: upload build artifacts
           uses: actions/upload-artifact@v4
           with:
-            name: build-output.${{github.run_number}}
-            path: /dist
+            name: app-build
+            path: /app_build.tar.gz
     deploy:
       needs: build-artifact
       runs-on: ubuntu-latest
@@ -70,4 +78,5 @@ jobs:
 
         - name: List directory
           run: |
+            tar -xvzf app_build.tar.gz .
             ls -l ./deployment
