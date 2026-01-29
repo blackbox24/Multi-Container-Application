@@ -65,7 +65,7 @@ jobs:
           uses: actions/upload-artifact@v4
           with:
             name: app-build
-            path: /app_build.tar.gz
+            path: ../app_build.tar.gz
     deploy:
       needs: build-artifact
       runs-on: ubuntu-latest
