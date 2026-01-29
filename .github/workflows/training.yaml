@@ -70,8 +70,7 @@ jobs:
     deploy:
       needs: build-artifact
       runs-on: ubuntu-latest
-      env:
-        GH_TOKEN: ${{github.token}}
+      
 
       steps:
         - name: Download build artifacts
@@ -86,8 +85,8 @@ jobs:
             ls -l ./deployment
 
         - name: Monitor Artifact
+          env:
+            GH_TOKEN: ${{github.token}}
           run: |
             echo "Checking artifact usage"
-            $GH_TOKEN=${{github.token}}
-            echo "GH_TOKEN=$GH_TOKEN" >> $GITHUB_ENV
             gh api repos/${{github.repository}} --jq '.size'
