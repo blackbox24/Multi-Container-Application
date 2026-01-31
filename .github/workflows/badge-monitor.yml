@@ -6,7 +6,7 @@ on:
         types: [completed]
 
 jobs:
-    notify-status:
+    notify-status-failure:
         runs-on: ubuntu-latest
         if: ${{github.event.workflow_run.conclusion == 'failure' }}
 
@@ -16,5 +16,18 @@ jobs:
               with:
                 status: failure
                 text: "Alert CI pipeline badge is showing failure status"
+              env:
+                SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
+        
+    notify-status-success:
+        runs-on: ubuntu-latest
+        if: ${{github.event.workflow_run.conclusion == 'success' }}
+
+        steps:
+            - name: Notify team of Success badge
+              uses: 8398a7/action-slack@v3
+              with:
+                status: failure
+                text: "Alert CI pipeline badge is showing Success status"
               env:
                 SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
