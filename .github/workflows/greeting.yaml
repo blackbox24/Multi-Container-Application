@@ -1,4 +1,4 @@
-name: Running Test
+name: Greeting Pipeline
 run-name: ${{github.actor}} is testing out Github actions
 
 on: [push]

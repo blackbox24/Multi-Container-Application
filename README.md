@@ -142,7 +142,7 @@ Steps usually include:
 - SSH into server
 - `docker compose pull && docker compose up -d`
 
-Secrets needed in repo settings:
+Secrets needed in Multi-Container-Application settings:
 
 - `SSH_PRIVATE_KEY`
 - `SERVER_IP` or `HOST`
@@ -172,3 +172,7 @@ Or use a managed solution (Cloudflare, Traefik, Caddy, etc.)
 ## License
 
 MIT
+
+[![Build Status](https://github.com/blackbox24/Multi-Container-Application/actions/workflows/ci.yml/badge.svg)](https://github.com/blackbox24/Multi-Container-Application/actions/workflows/ci.yml)
+[![Training Status](https://github.com/blackbox24/Multi-Container-Application/actions/workflows/training.yaml/badge.svg)](https://github.com/blackbox24/Multi-Container-Application/actions/workflows/training.yaml)
+[![Greeting Status](https://github.com/blackbox24/Multi-Container-Application/actions/workflows/greeting.yaml/badge.svg)](https://github.com/blackbox24/Multi-Container-Application/actions/workflows/greeting.yaml)
