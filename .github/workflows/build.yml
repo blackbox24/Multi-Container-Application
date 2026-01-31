@@ -1,0 +1,34 @@
+name: Build Application
+
+run-name: Build Application
+
+on:
+    workflow_run:
+      workflows: ["Test CI pipeline"]
+      types: [completed]
+
+jobs:
+    build-artifact:
+        runs-on: ubuntu-latest
+        if: ${{github.event.workflow_run.conclusion == 'success'}}
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v5
+
+            - name: Setup nodejs env
+              uses: actions/setup-node@v3
+            
+            - name: Install Packages
+              run: npm ci
+
+            - name: Build Application
+              run: |
+                sudo mkdir build_output
+                sudo tar -cvf build_output/app_build.tar --exclude 'build_output' --ignore-failed-read ./
+
+            - name: Upload Application
+              uses: actions/upload-artifact@v4
+              with:
+                name: app-build
+                path: build_output/app_buid.tar
