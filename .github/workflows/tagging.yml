@@ -1,0 +1,56 @@
+name: Create Release Tag
+run-name: Create Release Tag
+
+on:
+    push:
+        branches: [main]
+    workflow_dispatch:
+      inputs:
+        version:
+            description: "Version number (eg., v1.4.5)"
+            required: true
+            type: string
+
+jobs:
+    create-tag:
+        if: contains(github.event.head_commit.message, '[release]')
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with: 
+                fetch-depth: 0
+
+            - name: Extract version from commit
+              id: version
+              run: |
+                VERSION=$(echo "${{github.event.head_commit.message}}" | grep -oP '\[release\]\s*\K\S+')
+
+                if [[ -z $VERSION ]]; then
+                   echo "No version found in commit message"
+                   exit 1
+                fi
+
+                echo "version=$VERSION" >> $GITHUB_OUTPUT
+                echo "Found version: $VERSION"
+
+            - name: Create and push tag
+              run: |
+                VERSION="${{ steps.version.outputs.version }}"
+
+                # configure git
+                git config user.username "blackbox24"
+                git config user.email "nicardid@gmail.com"
+
+                # Create annotated tag
+                git tag -a $VERSION -m "Release $VERSION"
+
+                # Changes in this release
+                $(git log --oneline $(git describe --tags --abbrev=0)..HEAD)
+                
+                # Push tag to remote
+                git push origin $VERSION
+
+                echo "Create and Pushed $VERSION"
+
