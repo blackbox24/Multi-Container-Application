@@ -1,5 +1,5 @@
 name: Create Release Tag
-run-name: Create Release Tag
+run-name: Create Release Tagging
 
 on:
     push:
