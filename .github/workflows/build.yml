@@ -31,4 +31,4 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                 name: app-build
-                path: build_output/app_buid.tar
+                path: build_output/app_build.tar
