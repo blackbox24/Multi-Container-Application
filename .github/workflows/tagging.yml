@@ -40,8 +40,8 @@ jobs:
                 VERSION="${{ steps.version.outputs.version }}"
 
                 # configure git
-                git config user.username "blackbox24"
-                git config user.email "nicardid@gmail.com"
+                git config --global user.name "blackbox24"
+                git config --global user.email "nicardid@gmail.com"
 
                 # Create annotated tag
                 git tag -a $VERSION -m "Release $VERSION"
