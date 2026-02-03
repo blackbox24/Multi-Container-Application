@@ -46,6 +46,7 @@ jobs:
                 username: ${{vars.DOCKERHUB_USERNAME}}
                 password: ${{secrets.DOCKERHUB_PASSWORD}}
             - name: Set up QEM
+            # assign IP address and access docker hub website
               uses: docker/setup-qemu-action@v3
 
             - name: SetUp Docker Buildx
