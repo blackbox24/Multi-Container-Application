@@ -13,11 +13,11 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"]
 }
 
-resource "aws_instance" "app_server" {
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = var.instance_name
+# resource "aws_instance" "app_server" {
+#   ami           = data.aws_ami.ubuntu.id
+#   instance_type = var.instance_name
 
-  tags = {
-    Name = var.instance_name
-  }
-}
+#   tags = {
+#     Name = var.instance_name
+#   }
+# }
