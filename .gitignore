@@ -5,3 +5,77 @@ node_modules
 coverage/
 app_build.zip
 app_build2.tar
+
+# ----------------------
+# Terraform-specific ignores (most important)
+# ----------------------
+
+# Local Terraform working directory (contains downloaded providers & modules)
+**/.terraform/
+.terraform/
+.terraform.lock.hcl   # Optional: some people commit this for consistency, but many ignore it
+
+# State files - NEVER commit these (they contain real resource IDs, secrets in some cases)
+*.tfstate
+*.tfstate.*
+terraform.tfstate
+terraform.tfstate.backup
+
+# Crash logs from failed runs
+crash.log
+crash.*.log
+
+# Plan files - often contain sensitive values if you used variables/secrets
+*.tfplan
+*tfplan*
+
+# Variable files that might contain secrets (especially auto-generated or personal ones)
+*.tfvars
+*.auto.tfvars
+*.tfvars.json
+*.auto.tfvars.json
+personal.tfvars       # example name you might use
+
+# Override files (rarely used, but ignore them)
+*.tfoverride
+override.tf
+override.tf.json
+
+# Terraform CLI config (credentials or aliases - never commit!)
+.terraformrc
+terraform.rc
+
+# ----------------------
+# General / OS / Editor ignores (good to have)
+# ----------------------
+
+# macOS junk
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows junk
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editor / IDE folders
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs and temp files
+*.log
+*.bak
+*.tmp
+
+# If you ever create a .env file for local secrets (very common)
+.env
+.env.local
+.env.*.local
+
+# Optional: If you use AWS CLI profiles locally and don't want to risk it
+.aws/credentials
+.aws/config
