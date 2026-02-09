@@ -1,5 +1,5 @@
 // src/db/index.js
-import { MongoClient } from 'mongodb';
+import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -20,24 +20,16 @@ export async function connectToDatabase() {
   }
 
   try {
-    client = new MongoClient(MONGODB_URI, {
+    client = await mongoose.connect(MONGODB_URI, {
       // Recommended options in 2024+
       connectTimeoutMS: 10000,
       serverSelectionTimeoutMS: 10000,
       // heartbeatFrequencyMS: 10000,    // optional
       // retryWrites: true,              // usually enabled by default
     });
-
-    await client.connect();
     console.log('→ MongoDB connected successfully');
 
-    db = client.db(MONGODB_DB_NAME);
-    
-    // Optional: you can verify connection by pinging
-    await db.command({ ping: 1 });
     console.log(`→ Using database: ${MONGODB_DB_NAME}`);
-
-    return db;
   } catch (error) {
     console.error('MongoDB connection failed:', error.message);
     throw error; // let the caller handle it
@@ -65,27 +57,27 @@ export async function closeDatabase() {
   }
 }
 
-// Optional: export a ready-to-use collection promise (most common pattern)
-export const todosCollection = (async () => {
-  try {
-    const db = await connectToDatabase();
-    const collect = db.collection('todo')
-    return collect;
-  } catch (err) {
-    console.error('Failed to initialize todos collection:', err);
-    process.exit(1); // or throw – depending on your preference
-  }
-})();
+// // Optional: export a ready-to-use collection promise (most common pattern)
+// export const todosCollection = (async () => {
+//   try {
+//     const db = await connectToDatabase();
+//     const collect = db.collection('todo')
+//     return collect;
+//   } catch (err) {
+//     console.error('Failed to initialize todos collection:', err);
+//     process.exit(1); // or throw – depending on your preference
+//   }
+// })();
 
-export const getAllCollections = async()=>{
-  try{
-    const db = await connectToDatabase();
-    const db_collections = db.listCollections().toArray();
-    const collectNames = (await db_collections).map( c => c.name)
-    console.log('Collection Names',collectNames)
-    return collectNames;
-  }catch(err){
-    console.error('Failed to initialize todos collection:', err);
-    process.exit(1);
-  }
-};
+// export const getAllCollections = async()=>{
+//   try{
+//     const db = await connectToDatabase();
+//     const db_collections = db.listCollections().toArray();
+//     const collectNames = (await db_collections).map( c => c.name)
+//     console.log('Collection Names',collectNames)
+//     return collectNames;
+//   }catch(err){
+//     console.error('Failed to initialize todos collection:', err);
+//     process.exit(1);
+//   }
+// };

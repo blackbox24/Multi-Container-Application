@@ -1,8 +1,9 @@
 import * as dotenv from "dotenv";
 import express from "express";
-import { getAllCollections } from "./config/db.js";
+import { connectToDatabase } from "./config/db.js";
 import cors from "cors";
 import todo_router from "./routes/todo.routes.js";
+
 
 dotenv.config();
 const app = express();
@@ -19,17 +20,20 @@ app.get("/", async (req, resp) => {
 
 app.use("/todos/",todo_router);
 
-app.get("/test-db", async (req, resp) => {
-  try {
-    const collections = await getAllCollections();
-    console.log("collections:", collections);
-    resp.status(200).json({ collections: collections });
-  } catch (error) {
-    console.error(`Error occurred: ${error}`);
-    resp.status(500).json({ error: error });
-  }
-});
+// app.get("/test-db", async (req, resp) => {
+//   try {
+//     const collections = await getAllCollections();
+//     console.log("collections:", collections);
+//     resp.status(200).json({ collections: collections });
+//   } catch (error) {
+//     console.error(`Error occurred: ${error}`);
+//     resp.status(500).json({ error: error });
+//   }
+// });
+
+
 app.listen(PORT, () => {
+  connectToDatabase().catch(error => console.error(error))
   console.log(`Server is running on ${PORT}`);
 });
 

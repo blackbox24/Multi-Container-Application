@@ -1,18 +1,11 @@
-import { getTodosCollection, todosCollection } from "../config/db.js";
+import {todoModel} from "../models/todo.model.js";
 import { ObjectId, BSON } from "mongodb";
 import { todoInput, handleControllerError } from "../middleware/validate.js";
 
 export const getAllTasks = async (req, resp) => {
   try {
-    const cursor = await todosCollection;
+    const tasks = await todoModel.find()
 
-    const tasks = await cursor
-      .find(
-        {},
-        { projection: { _id: 1, title: 1, is_complete: 1, created_At: 1 } },
-      )
-      .toArray();
-    console.log(tasks);
     return resp
       .status(200)
       .json({ message: "Successfully fetch data", data: tasks });
@@ -30,9 +23,7 @@ export const addTodo = async (req, resp) => {
             return resp.status(400).json({"message":""})
         }
 
-        const cursor = await todosCollection;
-
-        await cursor.insertOne({
+        await todoModel.create({
             title: body.title,
             is_complete: body.is_complete || false,
             created_At: Date()
@@ -51,20 +42,18 @@ export const addTodo = async (req, resp) => {
 export const getSingleTodo =  async(req, resp) => {
     try{
         const {id} = req.params;
-        const query = {
-            _id: new ObjectId(id),
+        const todo = await todoModel.findOne({_id:id}).exec();
+        if(todo === null){
+            return resp.status(404).json({"message":"Not Found",data:[]})
         }
-        const cursor = await todosCollection;
-        const todo = await cursor.findOne(query);
-        console.log(todo.is_complete)
-
         return resp.status(200).json({"message":"Fetch successful",data:todo});
     }catch(error){
-        if ( error instanceof BSON.BSONError){
-            console.error(error)
+        if ( error instanceof BSON.BSONError || error.name === "CastError"){
+            console.error(error.message)
             return resp.status(404).json({"message":"Not found",data:[]});
         }
-        return resp.status(400).json({"message":"Error occurred"})
+        console.error(error)
+        return resp.status(400).json({"message":"Error occurred",})
     }
 }
 
@@ -73,24 +62,21 @@ export const updateTodo = async(req, resp) => {
         const {id} = req.params;
         const {is_complete } = req.body;
         const query = {
-            _id: new ObjectId(id),
+            _id: id
         }
-        const cursor = await todosCollection;
-        const todo = await cursor.updateOne(query,{
-            $set: {is_complete}
-        });
+        const todo = await todoModel.findOneAndUpdate(query,{is_complete});
         
-        if(!todo.matchedCount){
-            return resp.status(400).json({"message":"Failed to update data",reason: "No match found"})
-        }
+        // if(!todo.matchedCount){
+        //     return resp.status(400).json({"message":"Failed to update data",reason: "No match found"})
+        // }
 
         return resp.status(200).json({"message":"update successful",});
     }catch(error){
-        if ( error instanceof BSON.BSONError){
-            console.error(error)
+        if ( error instanceof BSON.BSONError || error.name === "CastError"){
+            console.error(error.message)
             return resp.status(404).json({"message":"Not found",data:[]});
         }
-        return resp.status(500).json({"message":"Error occurred",error})
+        return resp.status(500).json({"message":"Error occurred",error:error})
     }
 }
 
@@ -98,19 +84,18 @@ export const deleteTodo = async(req, resp) => {
     try{
         const {id} = req.params;
         const query = {
-            _id: new ObjectId(id),
+            _id: id,
         }
-        const cursor = await todosCollection;
-        const todo = await cursor.deleteOne(query);
+        const todo = await todoModel.deleteOne(query);
         console.log(todo)
         if(!todo.deletedCount){
-            return resp.status(400).json({"message":"Failed to update data",reason: "No match found"})
+            return resp.status(400).json({"message":"Failed to delete data",reason: "No match found"})
         }
 
         return resp.status(200).json({"message":"delete successful",});
     }catch(error){
-        if ( error instanceof BSON.BSONError){
-            console.error(error)
+        if ( error instanceof BSON.BSONError ||  error.name === "CastError"){
+            console.error(error.message)
             return resp.status(404).json({"message":"Not found",data:[]});
         }
         return resp.status(500).json({"message":"Error occurred",error})
