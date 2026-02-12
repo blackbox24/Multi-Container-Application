@@ -18,6 +18,13 @@ resource "aws_security_group" "allow_traffic" {
   name        = "allow_ssh_tcp"
   description = "Allow SSH and standard TCP traffic"
   # vpc_id    = "your-vpc-id" # Optional: specify if not using default VPC
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  tags = {
+    Name = "${var.instance_name}-sg"
+  }
 }
 
 # Allow SSH (Port 22)
@@ -56,6 +63,8 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
 resource "aws_instance" "app_server" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
+  vpc_security_group_ids = [aws_security_group.allow_traffic.id]
+  key_name = var.keypair
 
   tags = {
     Name = var.instance_name

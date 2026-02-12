@@ -20,7 +20,7 @@ app_build2.tar
 *.tfstate.*
 terraform.tfstate
 terraform.tfstate.backup
-
+*.pem
 # Crash logs from failed runs
 crash.log
 crash.*.log
