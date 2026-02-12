@@ -34,3 +34,5 @@
       command:
         cmd: docker compose up -d
         chdir: /home/ubuntu/app
+
+  
