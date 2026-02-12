@@ -1,0 +1,36 @@
+- name: Deploy Application
+  hosts: webserver
+  become: yes
+  tasks:
+    - name: Install Docker
+      apt:
+        name: 
+          - docker.io
+          - docker-compose-v2
+        state: present
+        update_cache: yes
+
+    - name: Ensure docker has start
+      service:
+        name: docker
+        state: started
+        enabled: yes
+    
+    - name: Add ubuntu user to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+    - name: Clone github repo
+      git:
+        repo: https://github.com/blackbox24/Multi-Container-Application.git
+        dest: /home/ubuntu/app
+        version: main
+        force: yes
+      become_user: ubuntu
+    
+    - name: Run docker compose
+      command:
+        cmd: docker compose up -d
+        chdir: /home/ubuntu/app
